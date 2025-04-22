@@ -8,3 +8,4 @@ Fenshell, a simple and straightforward shell written in C. This is a learning pr
 - https://en.wikipedia.org/wiki/Shell_(computing)
 - https://www.geeksforgeeks.org/introduction-linux-shell-shell-scripting/
 - https://it.wikipedia.org/wiki/Codici_di_escape_ANSI
+- https://brennan.io/2015/01/16/write-a-shell-in-c/
