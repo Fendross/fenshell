@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void fenshell_loop(void);
+// Custom declarations.
+#define FENSHELL_RL_BUFSIZE 1024
 
+// Function stubs.
+void fenshell_loop(void);
 char *fenshell_read_line(void);
 
+// Function implementations.
 void fenshell_loop(void) {
     char *line;
     char **args;
@@ -21,7 +25,6 @@ void fenshell_loop(void) {
     } while (status);
 }
 
-#define FENSHELL_RL_BUFSIZE 1024
 char *fenshell_read_line(void) {
     int bufsize = FENSHELL_RL_BUFSIZE;
     int position = 0;
@@ -39,6 +42,7 @@ char *fenshell_read_line(void) {
     }
 }
 
+// Main program.
 int main(int argc, char **argv)
 {
     // Load config files.
