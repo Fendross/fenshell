@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 // Custom declarations.
 #define FENSHELL_RL_BUFSIZE 1024
@@ -7,12 +10,41 @@
 #define FENSHELL_TOK_BUFSIZE 64
 #define FENSHELL_TOK_DELIMITER " \t\r\n\a"
 
-// Function headers.
+// Function declarations.
 void fenshell_loop(void);
+
 char *fenshell_read_line(void);
 void check_buffer_allocation(char *buffer);
+
 char **fenshell_split_line(char *line);
 void check_tokens_allocation(char **tokens);
+
+int fenshell_launch(char **args);
+
+int fenshell_num_builtins();
+int fenshell_cd(char **args);
+int fenshell_help(char **args);
+int fenshell_exit(char **args);
+
+int fenshell_execute(char **args);
+
+// List of builtin commands.
+char *builtin_str[] = {
+    "cd",
+    "help",
+    "exit"
+};
+
+// Array of function pointers.
+int (*builtin_func[]) (char **) = {
+    &fenshell_cd,
+    &fenshell_help,
+    &fenshell_exit
+};
+
+int fenshell_num_builtins() {
+    return sizeof(builtin_str) / sizeof(char *);
+}
 
 // Function implementations.
 void fenshell_loop(void) {
@@ -104,6 +136,82 @@ void check_tokens_allocation(char **tokens) {
     }
 }
 
+int fenshell_launch(char **args) {
+    pid_t pid, wpid;
+    int status;
+
+    // In order to start a new process, we first need to fork an existing one.
+    pid = fork();
+    if (pid == 0) {
+        // Child process.
+
+        // We use a variant of the system call exec(), execvp(), which expects a program name and an array (or vector) of string arguments.
+        // The p indicates that the OS is going to search for the program, we don't provide the full path of the program to run.
+        if (execvp(args[0], args) == -1) {
+            perror("fenshell");
+        }
+        exit(EXIT_FAILURE);
+    } else if (pid < 0) {
+        // Error forking.
+        perror("fenshell");
+    } else {
+        // Parent process.
+        do {
+            wpid = waitpid(pid, &status, WUNTRACED);
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
+
+    return 1;
+}
+
+// Builtin function implementations.
+int fenshell_cd(char **args) {
+    if (args[1] == NULL) {
+        fprintf(stderr, "fenshell: expected argument to \"cd\"\n");
+    } else {
+        if (chdir(args[1]) != 0) {
+            perror("fenshell");
+        }
+    }
+    return 1;
+}
+
+int fenshell_help(char **args) {
+    int i;
+
+    printf("Fendross' Fenshell\n");
+    printf("Type program names and arguments, and hit enter!\n");
+    printf("The following are built in:\n");
+
+    for (i = 0; i < fenshell_num_builtins(); i++) {
+        printf("  %s\n", builtin_str[i]);
+    }
+
+    printf("Use the man command for info on other programs.\n");
+    return 1;
+}
+
+int fenshell_exit(char **args) {
+    return 0;
+}
+
+int fenshell_execute(char **args) {
+    int i;
+
+    if (args[0] == NULL) {
+        // Empty command has been entered.
+        return 1;
+    }
+
+    for (i = 0; i < fenshell_num_builtins(); i++) {
+        if (strcmp(args[0], builtin_str[i]) == 0) {
+            return (*builtin_func[i])(args);
+        }
+    }
+
+    return fenshell_launch(args);
+}
+
 // Main program.
 int main(int argc, char **argv)
 {
@@ -116,6 +224,5 @@ int main(int argc, char **argv)
     // Shutdown and cleanup functions.
     // TODO - No cleanup/shutdown functionalities for now.
 
-    printf("End of execution. Exiting...\n");
     return EXIT_SUCCESS;
 }
