@@ -4,6 +4,20 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+/*
+This shell is missing some features, for example:
+
+- Only whitespace separating arguments, no quoting or backslash escaping.
+- No piping or redirection.
+- Few standard builtins.
+- No globbing.
+
+TODO list:
+
+- mkdir builtin --> IN PROGRESS
+- rmdir builtin --> NOT STARTED
+*/
+
 // Custom declarations.
 #define FENSHELL_RL_BUFSIZE 1024
 
@@ -25,6 +39,7 @@ int fenshell_num_builtins();
 int fenshell_cd(char **args);
 int fenshell_help(char **args);
 int fenshell_exit(char **args);
+int fenshell_mkdir(char **args);
 
 int fenshell_execute(char **args);
 
@@ -32,14 +47,16 @@ int fenshell_execute(char **args);
 char *builtin_str[] = {
     "cd",
     "help",
-    "exit"
+    "exit",
+    "mkdir"
 };
 
 // Array of function pointers.
 int (*builtin_func[]) (char **) = {
     &fenshell_cd,
     &fenshell_help,
-    &fenshell_exit
+    &fenshell_exit,
+    &fenshell_mkdir
 };
 
 int fenshell_num_builtins() {
@@ -193,6 +210,18 @@ int fenshell_help(char **args) {
 
 int fenshell_exit(char **args) {
     return 0;
+}
+
+int fenshell_mkdir(char **args) {
+    // TODO Make this work. It's returning: fenshell: Undefined error: 0
+    if (args[1] == NULL) {
+        fprintf(stderr, "fenshell: expected argument to \"mkdir\"\n");
+    } else {
+        if (mkdtemp(args[1]) != 0) {
+            perror("fenshell");
+        }
+    }
+    return 1;
 }
 
 int fenshell_execute(char **args) {
