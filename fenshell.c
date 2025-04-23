@@ -76,6 +76,7 @@ char **fenshell_split_line(char *line) {
 
     check_tokens_allocation(tokens);
 
+    // Returns pointers to within the string, and appends \0 bytes at the end of each token.
     token = strtok(line, FENSHELL_TOK_DELIMITER);
     while (token != NULL) {
         tokens[position] = token;
@@ -90,6 +91,8 @@ char **fenshell_split_line(char *line) {
 
         token = strtok(NULL, FENSHELL_TOK_DELIMITER);
     }
+
+    // No token has been returned by strtok().
     tokens[position] = NULL;
     return tokens;
 }
@@ -107,7 +110,7 @@ int main(int argc, char **argv)
     // Load config files.
     // TODO - No config files to load for now.
 
-    // Loop Fenshell
+    // Loop the Fenshell
     fenshell_loop();
 
     // Shutdown and cleanup functions.

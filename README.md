@@ -1,8 +1,10 @@
 # FENSHELL
 
-### WIP
-
 Fenshell, a simple and straightforward shell written in C. This is a learning project, and before starting it I will document myself on the subject.
+
+## How to use
+
+To execute `fenshell.c`, simply clone the repo, cd into it and then run the shell `build_and_run.sh`.
 
 ## References
 - https://en.wikipedia.org/wiki/Shell_(computing)
