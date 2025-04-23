@@ -4,7 +4,7 @@
 // Custom declarations.
 #define FENSHELL_RL_BUFSIZE 1024
 
-// Function stubs.
+// Function headers.
 void fenshell_loop(void);
 char *fenshell_read_line(void);
 
@@ -15,7 +15,7 @@ void fenshell_loop(void) {
     int status;
 
     do {
-        printf("$ ");
+        printf("fenshell> ");
         line = fenshell_read_line();
         args = fenshell_split_lines(line);
         status = fenshell_execute(args);
@@ -54,6 +54,6 @@ int main(int argc, char **argv)
     // Shutdown and cleanup functions.
     // TODO - No cleanup/shutdown functionalities for now.
 
-    printf("End of execution.\n");
+    printf("End of execution. Exiting...\n");
     return EXIT_SUCCESS;
 }
