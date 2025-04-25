@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 /*
 This shell is missing some features, for example:
@@ -14,7 +15,7 @@ This shell is missing some features, for example:
 
 TODO list:
 
-- mkdir builtin --> IN PROGRESS
+- mkdir builtin --> DONE
 - rmdir builtin --> NOT STARTED
 */
 
@@ -213,11 +214,10 @@ int fenshell_exit(char **args) {
 }
 
 int fenshell_mkdir(char **args) {
-    // TODO Make this work. It's returning: fenshell: Undefined error: 0 even if it creates the directory.
     if (args[1] == NULL) {
         fprintf(stderr, "fenshell: expected argument to \"mkdir\"\n");
     } else {
-        if (mkdtemp(args[1]) != 0) {
+        if (mkdir(args[1], S_IRWXU) != 0) {
             perror("fenshell");
         }
     }
@@ -245,13 +245,13 @@ int fenshell_execute(char **args) {
 int main(int argc, char **argv)
 {
     // Load config files.
-    // TODO - No config files to load for now.
+    // No config files to load for now.
 
     // Loop the Fenshell
     fenshell_loop();
 
     // Shutdown and cleanup functions.
-    // TODO - No cleanup/shutdown functionalities for now.
+    // No cleanup/shutdown functionalities for now.
 
     return EXIT_SUCCESS;
 }

@@ -1,6 +1,8 @@
 # FENSHELL
 
-Fenshell, a simple and straightforward shell written in C. This is a learning project, and before starting it I will document myself on the subject.
+## Overview
+
+A simple and straightforward shell written in C. This is a learning project, and before starting it I will document myself on the subject.
 
 ## How to use
 
@@ -20,6 +22,7 @@ As of now, the launchable commands are:
 - **`cd path`** - Changes the current directory to `path`
 - **`help`** - Gives a concise guide on what's currently available
 - **`exit`** - Exits Fenshell
+- **`mkdir path`** - Creates the directory `path`
 
 ## References
 - https://en.wikipedia.org/wiki/Shell_(computing)
