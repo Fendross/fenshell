@@ -3,6 +3,21 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+
+/*
+This shell is missing some features, for example:
+
+- Only whitespace separating arguments, no quoting or backslash escaping.
+- No piping or redirection.
+- Few standard builtins.
+- No globbing.
+
+TODO list:
+
+- mkdir builtin --> DONE
+- rmdir builtin --> NOT STARTED
+*/
 
 // Custom declarations.
 #define FENSHELL_RL_BUFSIZE 1024
@@ -25,6 +40,7 @@ int fenshell_num_builtins();
 int fenshell_cd(char **args);
 int fenshell_help(char **args);
 int fenshell_exit(char **args);
+int fenshell_mkdir(char **args);
 
 int fenshell_execute(char **args);
 
@@ -32,14 +48,16 @@ int fenshell_execute(char **args);
 char *builtin_str[] = {
     "cd",
     "help",
-    "exit"
+    "exit",
+    "mkdir"
 };
 
 // Array of function pointers.
 int (*builtin_func[]) (char **) = {
     &fenshell_cd,
     &fenshell_help,
-    &fenshell_exit
+    &fenshell_exit,
+    &fenshell_mkdir
 };
 
 int fenshell_num_builtins() {
@@ -195,6 +213,17 @@ int fenshell_exit(char **args) {
     return 0;
 }
 
+int fenshell_mkdir(char **args) {
+    if (args[1] == NULL) {
+        fprintf(stderr, "fenshell: expected argument to \"mkdir\"\n");
+    } else {
+        if (mkdir(args[1], S_IRWXU) != 0) {
+            perror("fenshell");
+        }
+    }
+    return 1;
+}
+
 int fenshell_execute(char **args) {
     int i;
 
@@ -216,13 +245,13 @@ int fenshell_execute(char **args) {
 int main(int argc, char **argv)
 {
     // Load config files.
-    // TODO - No config files to load for now.
+    // No config files to load for now.
 
     // Loop the Fenshell
     fenshell_loop();
 
     // Shutdown and cleanup functions.
-    // TODO - No cleanup/shutdown functionalities for now.
+    // No cleanup/shutdown functionalities for now.
 
     return EXIT_SUCCESS;
 }
