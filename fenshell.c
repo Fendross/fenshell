@@ -213,7 +213,7 @@ int fenshell_exit(char **args) {
 }
 
 int fenshell_mkdir(char **args) {
-    // TODO Make this work. It's returning: fenshell: Undefined error: 0
+    // TODO Make this work. It's returning: fenshell: Undefined error: 0 even if it creates the directory.
     if (args[1] == NULL) {
         fprintf(stderr, "fenshell: expected argument to \"mkdir\"\n");
     } else {
