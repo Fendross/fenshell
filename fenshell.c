@@ -18,7 +18,7 @@ This shell is missing some features, for example:
 TODO list:
 
 - mkdir builtin --> DONE
-- rmdir builtin --> IN PROGRESS
+- rmdir builtin --> DONE
 */
 
 // List of builtin commands.
