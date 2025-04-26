@@ -20,5 +20,6 @@ int fenshell_cd(char **args);
 int fenshell_help(char **args);
 int fenshell_exit(char **args);
 int fenshell_mkdir(char **args);
+int fenshell_rmdir(char **args);
 
 int fenshell_execute(char **args);

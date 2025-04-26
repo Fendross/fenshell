@@ -23,6 +23,7 @@ As of now, the launchable commands are:
 - **`help`** - Gives a concise guide on what's currently available
 - **`exit`** - Exits Fenshell
 - **`mkdir path`** - Creates the directory `path`
+- **`rmdir path`** - Removes the empty directory `path`
 
 ## References
 - https://en.wikipedia.org/wiki/Shell_(computing)

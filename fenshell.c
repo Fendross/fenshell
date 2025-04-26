@@ -18,7 +18,7 @@ This shell is missing some features, for example:
 TODO list:
 
 - mkdir builtin --> DONE
-- rmdir builtin --> NOT STARTED
+- rmdir builtin --> IN PROGRESS
 */
 
 // List of builtin commands.
@@ -26,7 +26,8 @@ char *builtin_str[] = {
     "cd",
     "help",
     "exit",
-    "mkdir"
+    "mkdir",
+    "rmdir"
 };
 
 // Array of function pointers.
@@ -34,7 +35,8 @@ int (*builtin_func[]) (char **) = {
     &fenshell_cd,
     &fenshell_help,
     &fenshell_exit,
-    &fenshell_mkdir
+    &fenshell_mkdir,
+    &fenshell_rmdir
 };
 
 int fenshell_num_builtins() {
@@ -195,6 +197,17 @@ int fenshell_mkdir(char **args) {
         fprintf(stderr, "fenshell: expected argument to \"mkdir\"\n");
     } else {
         if (mkdir(args[1], S_IRWXU) != 0) {
+            perror("fenshell");
+        }
+    }
+    return 1;
+}
+
+int fenshell_rmdir(char **args) {
+    if (args[1] == NULL) {
+        fprintf(stderr, "fenshell: expected argument to \"rmdir\"\n");
+    } else {
+        if (rmdir(args[1]) != 0) {
             perror("fenshell");
         }
     }
